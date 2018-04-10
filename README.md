@@ -35,6 +35,16 @@ R Plot Format <br>
 ###########<br>
 There are 11 columns in Our R plot Format. User could change any alignment format into our R plot format and then plot it by our R script. And there is a sample file named "out.format" in project.<br>
 <p>
-refid <br>qryid <br>reflen <br>qrylen <br>refstart <br>refend <br>qrystart <br>qryend <br>refollen <br>belong ref start <br>belong ref <br>
+refid # 1st columns <br>
+qryid # 2nd columns <br>
+reflen # 3rd columns <br>
+qrylen # 4th columns<br>
+refstart # 5th columns<br>
+refend # 6th columns<br>
+qrystart # 7th columns<br>
+qryend # 8th columns<br>
+refollen # 9th columns<br>
+belong ref start # 10th columns<br>
+belong ref # 11th columns<br>
 </p>
 <br><br>
