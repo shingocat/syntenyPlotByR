@@ -11,7 +11,7 @@ optparse # an R package <br>
 plot mummer delta file<br>
 ###########<br>
 There is a sample delta file and an output named "out.png" in project. user could try this by yourself.<br> 
-<i>Rscript syntenyPlot.R -i &ltdelta.file&gt -o out.png</i><br>
+<i>Rscript syntenyPlot.R -i <delta.file> -o out.png</i><br>
 <br>
 ###########<br>
 Large delta file<br>
