@@ -31,7 +31,7 @@ There are two steps to format LastZ into our plot format. Only support one chrom
 <b>If the delta is formatted, the parameter -c should be setted.</b><br>
 
 ###########<br>
-R Plot Format
+R Plot Format <br>
 ###########<br>
 There are 11 columns in Our R plot Format. User could change any alignment format into our R plot format and then plot it by our R script. And there is a sample file named "out.format" in project.<br>
 # refid <br>
