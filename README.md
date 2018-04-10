@@ -34,15 +34,7 @@ There are two steps to format LastZ into our plot format. Only support one chrom
 R Plot Format <br>
 ###########<br>
 There are 11 columns in Our R plot Format. User could change any alignment format into our R plot format and then plot it by our R script. And there is a sample file named "out.format" in project.<br>
-# refid <br>
-# qryid <br>
-# reflen <br>
-# qrylen <br>
-# refstart <br>
-# refend <br>
-# qrystart <br>
-# qryend <br>
-# refollen <br>
-# belong ref start <br>
-# belong ref <br>
+<p>
+refid <br>qryid <br>reflen <br>qrylen <br>refstart <br>refend <br>qrystart <br>qryend <br>refollen <br>belong ref start <br>belong ref <br>
+</p>
 <br><br>
