@@ -4,7 +4,7 @@ plot synteny genome alignment by mapper Mummer or LastZ.<br>
 ###########<br>
 requriement<br>
 ###########<br>
-R<br>
+R 3.3+<br>
 optparse # an R package <br>
 <br>
 ###########<br>
