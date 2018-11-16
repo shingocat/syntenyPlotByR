@@ -20,9 +20,10 @@ option_list = list(
   make_option(c("-f", "--filter"), type = "integer", default = 500, help = "minimum contig to be plot, default = 500 bp", metavar = "number"),
   make_option(c("-x", "--xsize"), type = "double", default = 800, help = "xlab size in px", metavar = "number"),
   make_option(c("-y", "--ysize"), type = "double", default = 800, help = "ylab size in px", metavar = "number"),
+  make_option(c("-s", "--linesize"), type = "double", default = 3, help = "adjust the line size of plot, default = 3", metavar = "number"),
   make_option(c("-l", "--layout"), action = "store_true", default = FALSE,  help = "layout the plot"),
-  make_option(c("-c", "--clean"), action = "store_true", default = FALSE, help = "data after by perl script"),
-  make_option(c("-s", "--linesize"), action = "double", default = 3, help = "adjust the line size of plot, default = 3", metavar = "number")
+  make_option(c("-c", "--clean"), action = "store_true", default = FALSE, help = "data after by perl script")
+  
 );
 opt_parser = OptionParser(option_list = option_list);
 opt = parse_args(opt_parser);
