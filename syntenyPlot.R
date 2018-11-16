@@ -317,7 +317,7 @@ for (i in 1:chrs_num)
     # x2
     xy_coords[2, 2] = qrys.len;
     # y2
-    lines(xy_coords, col = "gray60", lty = linesize);
+    lines(xy_coords, col = "gray60", lty = 3);
   }
   # sort subdata
   subdata <- subdata[with(subdata, order(BeRefStart)), ];
@@ -354,7 +354,7 @@ for (i in 1:chrs_num)
         xy_coords[1, 2] = y_start + qrys[k, 7] #y1
         xy_coords[2, 2] = y_start + qrys[k, 8] #y2
       }
-      lines(xy_coords, col = col, lty = linesize);
+      lines(xy_coords, col = col, lty = 1, lwd = linesize);
     }
     # plot query id;
     text(
@@ -374,7 +374,7 @@ for (i in 1:chrs_num)
       #y1
       xy_coords[2, 2] = y_start + qrylen;
       #y2
-      lines(xy_coords, col = "gray60", lty = linesize)
+      lines(xy_coords, col = "gray60", lty = 3)
     }
     y_start = y_start + qrylen;
     subdata <- subdata[subdata$QryId != qryid, ];
