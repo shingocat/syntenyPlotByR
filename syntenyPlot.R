@@ -21,7 +21,8 @@ option_list = list(
   make_option(c("-x", "--xsize"), type = "double", default = 800, help = "xlab size in px", metavar = "number"),
   make_option(c("-y", "--ysize"), type = "double", default = 800, help = "ylab size in px", metavar = "number"),
   make_option(c("-l", "--layout"), action = "store_true", default = FALSE,  help = "layout the plot"),
-  make_option(c("-c", "--clean"), action = "store_true", default = FALSE, help = "data after by perl script")
+  make_option(c("-c", "--clean"), action = "store_true", default = FALSE, help = "data after by perl script"),
+  make_option(c("-s", "--linesize"), action = "double", default = 3, help = "adjust the line size of plot, default = 3", metavar = "number")
 );
 opt_parser = OptionParser(option_list = option_list);
 opt = parse_args(opt_parser);
@@ -38,11 +39,13 @@ ysize <- opt$ysize;
 filter <- opt$filter;
 layout <- opt$layout;
 clean <- opt$clean;
+linesize <- opt$linesize;
 cat("Parameters:\n");
 cat("Out file :\t", out, "\n");
 cat("x size in px :\t", xsize, "\n");
 cat("y size in px :\t", ysize, "\n");
 cat("filter size of contig :\t", filter, "\n");
+cat("line size of plot :\t", linesize, "\n");
 cat("is layout: \t", layout, "\n");
 
 if(clean)
@@ -313,7 +316,7 @@ for (i in 1:chrs_num)
     # x2
     xy_coords[2, 2] = qrys.len;
     # y2
-    lines(xy_coords, col = "gray60", lty = 3);
+    lines(xy_coords, col = "gray60", lty = linesize);
   }
   # sort subdata
   subdata <- subdata[with(subdata, order(BeRefStart)), ];
@@ -350,7 +353,7 @@ for (i in 1:chrs_num)
         xy_coords[1, 2] = y_start + qrys[k, 7] #y1
         xy_coords[2, 2] = y_start + qrys[k, 8] #y2
       }
-      lines(xy_coords, col = col, lty = 1);
+      lines(xy_coords, col = col, lty = linesize);
     }
     # plot query id;
     text(
@@ -370,7 +373,7 @@ for (i in 1:chrs_num)
       #y1
       xy_coords[2, 2] = y_start + qrylen;
       #y2
-      lines(xy_coords, col = "gray60", lty = 3)
+      lines(xy_coords, col = "gray60", lty = linesize)
     }
     y_start = y_start + qrylen;
     subdata <- subdata[subdata$QryId != qryid, ];
