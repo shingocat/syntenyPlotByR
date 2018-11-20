@@ -22,8 +22,8 @@ option_list = list(
   make_option(c("-y", "--ysize"), type = "double", default = 800, help = "ylab size in px", metavar = "number"),
   make_option(c("-s", "--linesize"), type = "double", default = 3, help = "adjust the line size of plot, default = 3", metavar = "number"),
   make_option(c("-l", "--layout"), action = "store_true", default = FALSE,  help = "layout the plot"),
-  make_option(c("-c", "--clean"), action = "store_true", default = FALSE, help = "data after by perl script")
-  
+  make_option(c("-c", "--clean"), action = "store_true", default = FALSE, help = "data after by perl script"),
+  make_option(c("-b", "--byRefLen"), action = "store_true", default = FALSE, help = "Ordering Reference by their length (large to samll), default by their name")
 );
 opt_parser = OptionParser(option_list = option_list);
 opt = parse_args(opt_parser);
@@ -41,6 +41,7 @@ filter <- opt$filter;
 layout <- opt$layout;
 clean <- opt$clean;
 linesize <- opt$linesize;
+byRefLen <- opt$byRefLen;
 cat("Parameters:\n");
 cat("Out file :\t", out, "\n");
 cat("x size in px :\t", xsize, "\n");
@@ -48,6 +49,7 @@ cat("y size in px :\t", ysize, "\n");
 cat("filter size of contig :\t", filter, "\n");
 cat("line size of plot :\t", linesize, "\n");
 cat("is layout: \t", layout, "\n");
+cat("ordering by ref size: \t", byRefLen, "\n");
 
 if(clean)
 {
@@ -65,15 +67,24 @@ if(clean)
       "BeRefStart",
       "BeRef");
   
-  refs.level <- unique(plot.dat$RefId);
-  refs.level <- refs.level[order(nchar(refs.level), refs.level)];
+
   qrys.level <- unique(plot.dat$QryId);
+
+  # compute refs levels and their start and end position
   refs.len <- 0
   refs.pos <- c()
   x_start <- 0
-  
-  # compute refs levels and their start and end position
-  dat.first <- plot.dat[match(refs.level, plot.dat$RefId),];
+  refs.level <- unique(plot.dat$RefId);
+  dat.first <- NULL;
+  if(byRefLen)
+  {
+	dat.first <- plot.dat[match(refs.level, plot.dat$RefId),];
+	dat.first <- dat.first[order(-dat.first$RefLen),];
+	refs.level <- dat.first$RefId;
+  } else{
+	refs.level <- refs.level[order(nchar(refs.level), refs.level)];
+	dat.first <- plot.dat[match(refs.level, plot.dat$RefId),];
+  }
   #head(dat.first);
   #cat(nrow(dat.first));
   for (i in 1:nrow(dat.first))
@@ -176,15 +187,26 @@ if(clean)
   {
     stop("Error: Empty set after filtering ", filter, " bp.");
   }
-  refs.level <- unique(plot.dat$RefId);
-  refs.level <- refs.level[order(nchar(refs.level), refs.level)];
+ 
   qrys.level <- unique(plot.dat$QryId);
+  
+  
+  # compute refs levels and their start and end position
+  #dat.first <- plot.dat[match(refs.level, plot.dat$RefId),];
   refs.len <- 0
   refs.pos <- c()
   x_start <- 0
-  
-  # compute refs levels and their start and end position
-  dat.first <- plot.dat[match(refs.level, plot.dat$RefId),];
+  refs.level <- unique(plot.dat$RefId);
+  #refs.level <- refs.level[order(nchar(refs.level), refs.level)];
+  if(byRefLen)
+  {
+	dat.first <- plot.dat[match(refs.level, plot.dat$RefId),];
+	dat.first <- dat.first[order(-dat.first$RefLen),];
+	refs.level <- dat.first$RefId;
+  } else{
+	refs.level <- refs.level[order(nchar(refs.level), refs.level)];
+	dat.first <- plot.dat[match(refs.level, plot.dat$RefId),];
+  }
   #head(dat.first);
   #cat(nrow(dat.first));
   for (i in 1:nrow(dat.first))
