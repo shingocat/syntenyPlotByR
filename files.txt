@@ -1,0 +1,3 @@
+D:\data\rj\c2r.map
+D:\data\rj\f2r.map
+D:\data\rj\w2r.map
