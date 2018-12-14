@@ -1,5 +1,6 @@
 # syntenyPlotByR<br>
-plot synteny genome alignment by mapper Mummer or LastZ.<br>
+plot synteny genome alignment by mapper Mummer or LastZ using syntenyPlot.R.<br>
+plot assemblies comparison using comparePlot.R <br>
 <br>
 ###########<br>
 requriement<br>
@@ -47,4 +48,11 @@ refollen # 9th columns<br>
 belong ref start # 10th columns<br>
 belong ref # 11th columns<br>
 </p>
+
+###########<br>
+Plot assemblies comparison <br>
+###########<br>
+There is a sample of three alignment files using minimap and an output named "AssemblyCompare.png" in project. user could try this by yourself.<br> 
+<i>Rscript comparePlot.R -i <alignment.files> -o out.png</i><br>
+<br>
 <br><br>
