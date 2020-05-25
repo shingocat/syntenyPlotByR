@@ -60,37 +60,42 @@ cat("labels: \t", labels, "\n");
 
 cat("Reading alignment file starting...\n");
 col.names <- c("CId","CLen", "CStart", "CEnd", "COrient", "RId", "RLen", "RStart", "REnd");
-files <- readLines("./files.txt", n = -1);
+#files <- readLines("./files.txt", n = -1);
+files <- readLines(opt$input, n = -1);
 if(is.null(labels))
 {
-	labels <- files;
+  labels <- files;
 } else {
-	tmp <- strsplit(labels, ",");
-	labels <- tmp[[1]];
-	if(length(labels) != length(files))
-	{
-		stop("The labels is not equal to the alignment files size!");
-	}
+  tmp <- strsplit(labels, ",");
+  labels <- tmp[[1]];
+  if(length(labels) != length(files))
+  {
+    stop("The labels is not equal to the alignment files size!");
+  }
 }
 dat <- list();
 for(i in 1:length(files))
 {
-   tmp <- readLines(files[i], n = -1);
-   tmp <- strsplit(tmp, "\t");
-   x <- t(sapply(tmp, FUN = function(x){x[1:9]}, simplify = "array"));
-   x <- as.data.frame(x);
-   colnames(x) <- col.names;
-   x[, c(1,5,6)] <- apply(x[,c(1,5,6)], 2, as.character);
-   x[, -c(1,5,6)] <- apply(x[,-c(1,5,6)], 2, as.character);
-   x[, -c(1,5,6)] <- apply(x[,-c(1,5,6)], 2, as.numeric);
-   dat[[i]] <- x;
+  tmp <- readLines(files[i], n = -1);
+  tmp <- strsplit(tmp, "\t");
+  x <- t(sapply(tmp, FUN = function(x){x[1:9]}, simplify = "array"));
+  x <- as.data.frame(x);
+  colnames(x) <- col.names;
+  x[, c(1,5,6)] <- apply(x[,c(1,5,6)], 2, as.character);
+  x[, -c(1,5,6)] <- apply(x[,-c(1,5,6)], 2, as.character);
+  x[, -c(1,5,6)] <- apply(x[,-c(1,5,6)], 2, as.numeric);
+  dat[[i]] <- x;
 }
 cat("reading alignment file done...\n");
 
 # source findBinCov function
 findBinCov <- function(dat)
 {
-  fEnd = 1;
+  if(nrow(dat) == 0) {
+    cat("Empty input data.\n");
+    return;
+  }
+  fEnd = 0;
   output <- c();
   for(i in 1:nrow(dat))
   {
@@ -98,7 +103,8 @@ findBinCov <- function(dat)
     cEnd = dat[i, "REnd"]
     if(cStart >= fEnd)
     {
-      output <- rbind(output, c(fEnd, cStart, 0));
+      if(cStart != 0)
+        output <- rbind(output, c(fEnd, cStart, 0));
       output <- rbind(output, c(cStart, cEnd, 1));
       fEnd <- cEnd;
     } else
@@ -152,7 +158,7 @@ findBinCov <- function(dat)
         }
       }
       output <- output[-search.depth,];
-      output <- rbind(output, bins);
+      output <- rbind(output, bins, deparse.level = 0);
       fEnd <- locus[length(locus)];
     }
   }
@@ -161,6 +167,7 @@ findBinCov <- function(dat)
   {
     output[,j] <- as.numeric(as.character(output[,j]));
   }
+  colnames(output) <- c("Start", "End", "Cov");
   output;
 }
 
@@ -269,7 +276,7 @@ inner.iteration.function <- function(temp.dat, ol = 0.1, gap = 1000)
     forward.set <- (maxRARecordIndex + 1):nrecords;
     is.forwardable <- TRUE;
   }
- 
+  
   # reverse search
   visted.reverse.set <- c();
   if(is.reverseable)
@@ -418,6 +425,8 @@ y = 0;
 count_index = 0;
 step = round(x.max * 0.2);
 mark.range = round(x.max * 0.05);
+cat("Ref levels: ", length(ref.levels), ".\n");
+cat(ref.levels[1], ref.levels[2], ref.levels[3], "...\n");
 for(i in 1:length(ref.levels))
 {
   count_index <- count_index + 1;
@@ -427,7 +436,7 @@ for(i in 1:length(ref.levels))
   segments(x0 = 0, x1 = ch1.len, y0 = y, y1 = y, lwd = 3);
   text(x= ch1.len/2, y = y - 4 * mark.range , labels = ref.levels[i], cex = cex);
   marks.loc <- c();
- # if(ref.levels[i] == "ecoli")
+  # if(ref.levels[i] == "ecoli")
   #{
   #  marks.loc <- seq(from = 0, to = ch1.len, length.out = 5);
   #} else{
@@ -442,16 +451,23 @@ for(i in 1:length(ref.levels))
   for(j in 1:length(dat))
   {
     w2r <- dat[[j]];
-    w2r.format <- mergeAlignments(w2r, gap = 100000);
+    w2r.format <- mergeAlignments(w2r, gap = gap);
     w2r.format.ch1 <- w2r.format[which(w2r.format$RId == ref.levels[i]),];
     w2r.format.ch1 <- w2r.format.ch1[with(w2r.format.ch1, order(RStart)),];
     ch1.len <- w2r.format.ch1$RLen[1];
+    
+    if(nrow(w2r.format.ch1) == 0) {
+      cat("Ref level: ", ref.levels[i], ",length: ", ch1.len, " has no alignment records.\n", sep = "");
+      next;
+    }
     
     count_index <- count_index + 1;
     # wtdbg line
     y <- count_index * step;
     segments(x0 = 0, x1 = ch1.len, y0 = y, y1 = y, lwd = 3, col = "gray");
     bins <- findBinCov(w2r.format.ch1);
+    #print("BINS");
+    #print(bins);
     for(k in 1:nrow(bins))
     {
       if(bins[k,3] == 0)
